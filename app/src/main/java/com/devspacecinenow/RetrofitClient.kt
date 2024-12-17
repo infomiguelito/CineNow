@@ -1,5 +1,6 @@
 package com.devspacecinenow
 
+import androidx.core.os.BuildCompat
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,7 +14,7 @@ object RetrofitClient {
     private val httpClient: OkHttpClient
         get() {
             val clienteBuilder = OkHttpClient.Builder()
-            val token = ""
+            val token = BuildConfig.API_KEY
 
             clienteBuilder.addInterceptor {
                 chain ->
