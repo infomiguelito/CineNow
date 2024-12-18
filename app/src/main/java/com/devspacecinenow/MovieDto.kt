@@ -2,7 +2,6 @@ package com.devspacecinenow
 
 import com.google.gson.annotations.SerializedName
 
-@kotlinx.serialization.Serializable
 
 data class MovieDto(
     val id: Int,
@@ -12,6 +11,7 @@ data class MovieDto(
     val postPath: String,
 ){
     val posterFullPath: String
-        get() = "https://image.tmdb.org/t/p/w300$postPath"
+        get() =  "https://image.tmdb.org/t/p/w300$postPath"
+
 }
 
