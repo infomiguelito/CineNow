@@ -16,12 +16,11 @@ object RetrofitClient {
             val clientBuilder = OkHttpClient.Builder()
             val token = BuildConfig.API_KEY
 
-            clientBuilder.addInterceptor {
-                chain ->
-                val original : Request = chain.request()
+            clientBuilder.addInterceptor { chain ->
+                val original: Request = chain.request()
                 val requestBuilder: Request.Builder = original.newBuilder()
-                    .header("Authorization"," Bearer $token" )
-                val request : Request = requestBuilder.build()
+                    .header("Authorization", " Bearer $token")
+                val request: Request = requestBuilder.build()
                 chain.proceed(request)
             }
 
