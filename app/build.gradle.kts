@@ -11,14 +11,14 @@ android {
     namespace = "com.devspacecinenow"
     compileSdk = 34
 
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 
     defaultConfig {
         applicationId = "com.devspacecinenow"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -26,12 +26,12 @@ android {
         val properties = Properties()
         properties.load(localProperties.inputStream())
 
-        val apiKey = properties.getProperty("API_KEY")
+         val apiKey = properties.getProperty("API_KEY")
 
         buildConfigField(
-            type = "String",
-            name = "API_KEY",
-            value = apiKey
+            "String",
+            "API_KEY",
+            apiKey
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
