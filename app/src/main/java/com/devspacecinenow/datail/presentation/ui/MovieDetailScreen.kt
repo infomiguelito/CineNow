@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.devspacecinenow.ApiService
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.datail.presentation.MovieDetailViewModel
@@ -43,24 +42,9 @@ fun MovieDetailScreen(
     viewModel: MovieDetailViewModel
 ) {
     val movieDto by viewModel.uiDetailMovies.collectAsState()
+    viewModel.fetchDetailMovies(movieId)
 
-    val apiService = RetrofitClient.retrofitInstance.create(ApiService::class.java)
 
-    apiService.getMovieById(movieId).enqueue(
-        object : Callback<MovieDto> {
-            override fun onResponse(call: Call<MovieDto>, response: Response<MovieDto>) {
-                if (response.isSuccessful) {
-                    movieDto = response.body()
-                } else {
-                    Log.d("MainActivity", "Request Error :: ${response.errorBody()}")
-                }
-            }
-
-            override fun onFailure(call: Call<MovieDto>, t: Throwable) {
-                Log.d("MainActivity", "Network Error :: ${t.message}")
-            }
-        }
-    )
     movieDto?.let {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -70,6 +54,7 @@ fun MovieDetailScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
+                    viewModel.cleanMovieId()
                     navHostController.popBackStack()
                 }) {
                     Icon(

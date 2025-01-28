@@ -2,20 +2,21 @@ package com.devspacecinenow.list.data
 
 import com.devspacecinenow.common.model.MovieResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface ListService {
     @GET("now_playing?language=en-US&page=1")
-    fun getPlayingMovie() : Call<MovieResponse>
+    suspend fun getPlayingMovie() : Response<MovieResponse>
 
     @GET("top_rated?language=en-US&page=1")
-    fun getTopRatedMovie() : Call<MovieResponse>
+    suspend fun getTopRatedMovie() : Response<MovieResponse>
 
     @GET("upcoming?language=en-US&page=1")
-    fun getUpcomingMovies() : Call<MovieResponse>
+    suspend fun getUpcomingMovies() : Response<MovieResponse>
 
     @GET("popular?language=en-US&page=1")
-    fun getPopularMovies() : Call<MovieResponse>
+    suspend fun getPopularMovies() : Response<MovieResponse>
 
 
 }

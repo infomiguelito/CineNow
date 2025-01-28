@@ -4,13 +4,16 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.common.model.MovieResponse
 import com.devspacecinenow.list.data.ListService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,104 +43,64 @@ class MovieListViewModel(
     }
 
     private fun fetchNowPlayingMovies() {
-        listService.getPlayingMovie().enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(
-                call: Call<MovieResponse>, response: Response<MovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        _uiNowPlaying.value = movies
-                    }
-
-                } else {
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = listService.getPlayingMovie()
+            if (response.isSuccessful) {
+                val movies = response.body()?.results
+                if (movies != null) {
+                    _uiNowPlaying.value = movies
                 }
 
+            } else {
+                Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
             }
-
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.d("MovieListViewModel", "Network Error :: ${t.message}")
-            }
-
-        })
+        }
     }
 
-    private fun fetchTopRatedMovies() {
-        listService.getTopRatedMovie().enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(
-                call: Call<MovieResponse>, response: Response<MovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        _uiTopRated.value = movies
-                    }
 
-                } else {
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+    private fun fetchTopRatedMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = listService.getTopRatedMovie()
+            if (response.isSuccessful) {
+                val movies = response.body()?.results
+                if (movies != null) {
+                    _uiTopRated.value = movies
                 }
 
+            } else {
+                Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
             }
-
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.d("MovieListViewModel", "Network Error :: ${t.message}")
-            }
-
-        })
+        }
     }
 
     private fun fetchUpComingMovies() {
-        listService.getUpcomingMovies().enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(
-                call: Call<MovieResponse>,
-                response: Response<MovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        _uiUpComing.value = movies
-                    }
-
-                } else {
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = listService.getUpcomingMovies()
+            if (response.isSuccessful) {
+                val movies = response.body()?.results
+                if (movies != null) {
+                    _uiUpComing.value = movies
                 }
 
+            } else {
+                Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
             }
-
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.d("MovieListViewModel", "Network Error :: ${t.message}")
-            }
-
-        })
+        }
     }
 
     private fun fetchPopularMovies() {
-        listService.getPopularMovies().enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(
-                call: Call<MovieResponse>, response: Response<MovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        _uiPopular.value = movies
-                    }
-
-                } else {
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = listService.getPopularMovies()
+            if (response.isSuccessful) {
+                val movies = response.body()?.results
+                if (movies != null) {
+                    _uiPopular.value = movies
                 }
 
+            } else {
+                Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
             }
-
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.d("MovieListViewModel", "Network Error :: ${t.message}")
-            }
-
-        })
+        }
     }
 
     companion object {
