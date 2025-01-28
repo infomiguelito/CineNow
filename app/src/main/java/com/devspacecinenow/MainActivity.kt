@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -33,12 +34,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.devspacecinenow.datail.presentation.MovieDetailViewModel
+import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
+
+    private val listViewModel by viewModels<MovieListViewModel> {MovieListViewModel.factory}
+    private val detailViewModel by viewModels<MovieDetailViewModel> {MovieDetailViewModel.factory}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -47,7 +54,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CineNowApp()
+                    CineNowApp(
+                        listViewModel = listViewModel,
+                        detailViewModel = detailViewModel)
                 }
             }
         }

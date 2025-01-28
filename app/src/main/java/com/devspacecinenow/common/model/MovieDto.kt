@@ -1,4 +1,4 @@
-package com.devspacecinenow
+package com.devspacecinenow.common.model
 
 import com.google.gson.annotations.SerializedName
 
