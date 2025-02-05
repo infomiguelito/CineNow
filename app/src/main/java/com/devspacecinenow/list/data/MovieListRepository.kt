@@ -1,17 +1,17 @@
 package com.devspacecinenow.list.data
 
 import android.accounts.NetworkErrorException
-import android.util.Log
 import com.devspacecinenow.common.model.MovieResponse
-import com.devspacecinenow.list.presentation.ui.MovieListUiState
-import com.devspacecinenow.list.presentation.ui.MovieUiData
-import java.net.UnknownHostException
+import com.devspacecinenow.list.data.local.MovieListLocalDataSource
+import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 
 class MovieListRepository(
-    private val listService: ListService
+    private val local: MovieListLocalDataSource,
+    private val remote: MovieListRemoteDataSource
 ) {
     suspend fun getNowPlaying(): Result<MovieResponse?> {
-        return try {
+        return Result.success(MovieResponse(emptyList()))
+        /*return try {
             val response = listService.getPlayingMovie()
             if (response.isSuccessful) {
                 Result.success(response.body())
@@ -21,11 +21,12 @@ class MovieListRepository(
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }
+        }*/
     }
 
     suspend fun getTopRated(): Result<MovieResponse?> {
-        return try {
+        return Result.success(MovieResponse(emptyList()))
+        /*return try {
             val response = listService.getTopRatedMovie()
             if (response.isSuccessful) {
                 Result.success(response.body())
@@ -36,11 +37,12 @@ class MovieListRepository(
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }
+        }*/
     }
 
     suspend fun getPopular(): Result<MovieResponse?> {
-        return try {
+        return Result.success(MovieResponse(emptyList()))
+        /*return try {
             val response = listService.getPopularMovies()
             if (response.isSuccessful) {
                 Result.success(response.body())
@@ -51,11 +53,12 @@ class MovieListRepository(
             ex.printStackTrace()
             Result.failure(ex)
 
-        }
+        }*/
     }
 
     suspend fun getUpComing(): Result<MovieResponse?> {
-        return try {
+        return Result.success(MovieResponse(emptyList()))
+       /* return try {
             val response = listService.getUpcomingMovies()
             if (response.isSuccessful) {
                 Result.success(response.body())
@@ -65,6 +68,6 @@ class MovieListRepository(
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
-        }
+        }*/
     }
 }

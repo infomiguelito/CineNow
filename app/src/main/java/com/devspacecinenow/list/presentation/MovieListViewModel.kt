@@ -2,10 +2,12 @@ package com.devspacecinenow.list.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.devspacecinenow.CineNowApplication
 import com.devspacecinenow.common.data.RetrofitClient
-import com.devspacecinenow.list.data.ListService
+import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
@@ -174,9 +176,9 @@ class MovieListViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                val listService = RetrofitClient.retrofitInstance.create(ListService::class.java)
+                val application = checkNotNull(extras[APPLICATION_KEY])
                 return MovieListViewModel(
-                    repository = MovieListRepository(listService)
+                    repository = (application as CineNowApplication).repository
                 ) as T
             }
 
