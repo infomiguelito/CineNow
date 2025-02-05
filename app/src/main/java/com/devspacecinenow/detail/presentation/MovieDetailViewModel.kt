@@ -1,4 +1,4 @@
-package com.devspacecinenow.datail.presentation
+package com.devspacecinenow.detail.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,16 +7,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.common.model.MovieDto
-import com.devspacecinenow.datail.data.MovieDetail
-import com.devspacecinenow.list.data.ListService
+import com.devspacecinenow.detail.data.MovieDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MovieDetailViewModel(
     private val detailService: MovieDetail
