@@ -1,7 +1,7 @@
 package com.devspacecinenow.list.data
 
 import android.accounts.NetworkErrorException
-import com.devspacecinenow.common.model.MovieResponse
+import com.devspacecinenow.common.data.remote.model.MovieResponse
 import com.devspacecinenow.list.data.local.MovieListLocalDataSource
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 

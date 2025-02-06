@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.devspacecinenow.common.model.MovieDto
+import com.devspacecinenow.common.data.remote.model.MovieDto
 import com.devspacecinenow.list.presentation.MovieListViewModel
 
 @Composable

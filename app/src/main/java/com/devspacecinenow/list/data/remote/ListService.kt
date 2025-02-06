@@ -1,6 +1,6 @@
 package com.devspacecinenow.list.data.remote
 
-import com.devspacecinenow.common.model.MovieResponse
+import com.devspacecinenow.common.data.remote.model.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.devspacecinenow.common.data.RetrofitClient
-import com.devspacecinenow.common.model.MovieDto
+import com.devspacecinenow.common.data.remote.RetrofitClient
+import com.devspacecinenow.common.data.remote.model.MovieDto
 import com.devspacecinenow.detail.data.MovieDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
