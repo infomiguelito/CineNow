@@ -43,14 +43,14 @@ class MovieListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getNowPlaying()
             if (result.isSuccess) {
-                val movies = result.getOrNull()?.results
+                val movies = result.getOrNull()
                 if (movies != null) {
                     val movieUiDataList = movies.map { movieDto ->
                         MovieUiData(
                             id = movieDto.id,
                             title = movieDto.title,
                             overview = movieDto.overview,
-                            image = movieDto.posterFullPath
+                            image = movieDto.image
                         )
                     }
                     _uiNowPlaying.value = MovieListUiState(list = movieUiDataList)
@@ -75,14 +75,14 @@ class MovieListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getTopRated()
             if (response.isSuccess) {
-                val movies = response.getOrNull()?.results
+                val movies = response.getOrNull()
                 if (movies != null) {
                     val movieUiData = movies.map { movieDto ->
                         MovieUiData(
                             id = movieDto.id,
                             title = movieDto.title,
                             overview = movieDto.overview,
-                            image = movieDto.posterFullPath
+                            image = movieDto.image
                         )
                     }
                     _uiTopRated.value = MovieListUiState(list = movieUiData)
@@ -108,14 +108,14 @@ class MovieListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getUpComing()
             if (response.isSuccess) {
-                val movies = response.getOrNull()?.results
+                val movies = response.getOrNull()
                 if (movies != null) {
                     val movieUiData = movies.map { movieDto ->
                         MovieUiData(
                             id = movieDto.id,
                             title = movieDto.title,
                             overview = movieDto.overview,
-                            image = movieDto.posterFullPath
+                            image = movieDto.image
                         )
                     }
                     _uiUpComing.value = MovieListUiState(list = movieUiData)
@@ -140,14 +140,14 @@ class MovieListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getPopular()
             if (response.isSuccess) {
-                val movies = response.getOrNull()?.results
+                val movies = response.getOrNull()
                 if (movies != null) {
                     val movieUiData = movies.map { movieDto ->
                         MovieUiData(
                             id = movieDto.id,
                             title = movieDto.title,
                             overview = movieDto.overview,
-                            image = movieDto.posterFullPath
+                            image = movieDto.image
                         )
                     }
 
