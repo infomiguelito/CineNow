@@ -9,6 +9,7 @@ import com.devspacecinenow.CineNowApplication
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class MovieListViewModel(
-    private val repository: MovieListRepository
+    private val repository: MovieListRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _uiNowPlaying = MutableStateFlow(MovieListUiState())
@@ -40,7 +42,7 @@ class MovieListViewModel(
 
     private fun fetchNowPlayingMovies() {
         _uiNowPlaying.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getNowPlaying()
             if (result.isSuccess) {
                 val movies = result.getOrNull()
@@ -72,7 +74,7 @@ class MovieListViewModel(
 
     private fun fetchTopRatedMovies() {
         _uiTopRated.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val response = repository.getTopRated()
             if (response.isSuccess) {
                 val movies = response.getOrNull()
