@@ -7,6 +7,7 @@ import com.devspacecinenow.common.data.model.Movie
 class MovieListRemoteDataSource(
     private val listService: ListService
 ) {
+
     suspend fun getNowPlaying(): Result<List<Movie>?> {
         return try {
             val response = listService.getPlayingMovie()
