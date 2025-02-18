@@ -2,11 +2,9 @@ package com.devspacecinenow.list
 
 import com.devspacecinenow.common.data.local.MovieCategory
 import com.devspacecinenow.common.data.model.Movie
-import com.devspacecinenow.list.data.local.LocalDataSource
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
@@ -36,7 +34,7 @@ class MovieListRepositoryTest {
                     overview = "overview1",
                     image = "image1",
                     category = MovieCategory.NowPlaying.name
-                )
+                    )
             )
             whenever(remote.getNowPlaying()).thenReturn(Result.failure(UnknownHostException("No internet")))
             local.nowPlaying = localList
@@ -97,4 +95,5 @@ class MovieListRepositoryTest {
             assertEquals(local.updateItems, list)
         }
     }
+
 }
