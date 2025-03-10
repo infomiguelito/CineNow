@@ -1,51 +1,75 @@
-# CineNow APP
-CineNow é um aplicativo Android que permite aos usuários explorar filmes populares em tempo real, obtendo informações diretamente da API do The Movie Database (TMDB). Com uma interface amigável, os usuários podem visualizar detalhes de filmes, incluindo sinopse, data de lançamento, classificação, e muito mais.
+# CineNow - Recomendador de Filmes com IA
 
-Funcionalidades
-- Filmes Populares: Visualize uma lista de filmes populares atualizada diariamente.
-- Detalhes do Filme: Obtenha informações detalhadas sobre cada filme, como título, sinopse, data de lançamento, classificação, e cartaz.
-- Interface Intuitiva: Navegação fácil e design limpo para uma melhor experiência do usuário.
+CineNow é um aplicativo Android que utiliza Inteligência Artificial para recomendar filmes personalizados com base nas preferências e histórico do usuário.
 
-## :camera_flash: Screenshots
-<!-- You can add more screenshots here if you like -->
-<img src="https://github.com/ComunidadeDevSpace/CineNow/assets/11612508/9690f66d-fb65-4cd7-82db-954473cb6c2d" width=260/> <img src="https://github.com/ComunidadeDevSpace/CineNow/assets/11612508/f8006a40-8855-4d6f-b9b9-a44a8c991fe1" width=260/>
+## 🚀 Funcionalidades
 
+- Sistema de recomendação de filmes usando TensorFlow Lite
+- Recomendações baseadas em:
+  - Histórico de filmes assistidos
+  - Preferências de gêneros
+  - Popularidade dos filmes
+  - Avaliações do usuário
 
-## Tecnologias
-- 100% Kotlin
-- Compose
-  - Column
-  - Row
-  - Modifier
-  - Spacer
-  - LazyRows
-  - ComposePreview
-  - NavHostController
-  - AsyncImage
+## 🛠️ Tecnologias Utilizadas
+
+- Kotlin
+- Jetpack Compose
+- TensorFlow Lite
 - Retrofit
-- Okhttp3
-- TMDB API
+- Room Database
+- Coroutines
+- Material Design 3
 
-## License
+## 📋 Pré-requisitos
+
+- Android Studio Hedgehog | 2023.1.1 ou superior
+- JDK 8 ou superior
+- Android SDK 24+
+- Kotlin 1.9+
+
+## 🔧 Configuração
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/CineNow.git
 ```
-The MIT License (MIT)
 
-Copyright (c) 2024 Roque Buarque Junior
+2. Abra o projeto no Android Studio
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+3. Configure sua API key do TMDB:
+   - Crie um arquivo `local.properties` na raiz do projeto
+   - Adicione sua chave: `API_KEY="sua_chave_aqui"`
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+4. Sincronize o projeto com o Gradle
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
+5. Execute o aplicativo
+
+## 📱 Como usar
+
+1. Ao abrir o app pela primeira vez, você será solicitado a:
+   - Selecionar seus gêneros favoritos
+   - Avaliar alguns filmes para calibrar as recomendações
+
+2. O sistema de IA processará suas preferências e histórico
+
+3. Você receberá recomendações personalizadas de filmes
+
+## 🤝 Contribuindo
+
+1. Faça um Fork do projeto
+2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes
+
+## ✨ Próximos Passos
+
+- [ ] Implementar recomendações offline
+- [ ] Adicionar suporte a múltiplos usuários
+- [ ] Integrar com mais serviços de streaming
+- [ ] Melhorar a precisão do modelo de IA
