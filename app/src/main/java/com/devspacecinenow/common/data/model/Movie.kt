@@ -6,5 +6,6 @@ data class Movie(
     val title: String,
     val overview: String,
     val image: String,
-    val category: String
+    val category: String,
+    val genres: List<String> = emptyList()
 )

@@ -10,12 +10,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.list.presentation.MovieListViewModel
+import com.devspacecinenow.preferences.data.UserPreferencesRepository
+import com.devspacecinenow.preferences.presentation.UserPreferencesViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
 
 class MainActivity : ComponentActivity() {
 
     private val listViewModel by viewModels<MovieListViewModel> {MovieListViewModel.factory}
     private val detailViewModel by viewModels<MovieDetailViewModel> {MovieDetailViewModel.factory}
+    private val preferencesViewModel by viewModels<UserPreferencesViewModel> {
+        UserPreferencesViewModel.factory(UserPreferencesRepository(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +32,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     CineNowApp(
                         listViewModel = listViewModel,
-                        detailViewModel = detailViewModel)
+                        detailViewModel = detailViewModel,
+                        preferencesViewModel = preferencesViewModel
+                    )
                 }
             }
         }

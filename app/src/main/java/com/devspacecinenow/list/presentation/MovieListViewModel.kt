@@ -33,11 +33,15 @@ class MovieListViewModel(
     private val _uiPopular = MutableStateFlow(MovieListUiState())
     val uiPopular: StateFlow<MovieListUiState> = _uiPopular
 
+    private val _uiRecommended = MutableStateFlow(MovieListUiState())
+    val uiRecommended: StateFlow<MovieListUiState> = _uiRecommended
+
     init {
         fetchPopularMovies()
         fetchNowPlayingMovies()
         fetchTopRatedMovies()
         fetchUpComingMovies()
+        fetchRecommendedMovies()
     }
 
     private fun fetchNowPlayingMovies() {
@@ -169,6 +173,59 @@ class MovieListViewModel(
         }
     }
 
+    private fun fetchRecommendedMovies() {
+        _uiRecommended.value = MovieListUiState(isLoading = true)
+        viewModelScope.launch(dispatcher) {
+            try {
+                val response = repository.getRecommended()
+                if (response.isSuccess) {
+                    val movies = response.getOrNull()
+                    if (movies != null && movies.isNotEmpty()) {
+                        val movieUiData = movies.map { movieDto ->
+                            MovieUiData(
+                                id = movieDto.id,
+                                title = movieDto.title,
+                                overview = movieDto.overview,
+                                image = movieDto.image
+                            )
+                        }
+                        _uiRecommended.value = MovieListUiState(list = movieUiData, isLoading = false)
+                    } else {
+                        _uiRecommended.value = MovieListUiState(
+                            isError = true,
+                            errorMessage = "Não foi possível carregar as recomendações. Tente novamente mais tarde.",
+                            isLoading = false
+                        )
+                    }
+                } else {
+                    val ex = response.exceptionOrNull()
+                    _uiRecommended.value = MovieListUiState(
+                        isError = true,
+                        errorMessage = when (ex) {
+                            is UnknownHostException -> "Sem conexão com a internet"
+                            else -> ex?.message ?: "Erro ao carregar recomendações"
+                        },
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                _uiRecommended.value = MovieListUiState(
+                    isError = true,
+                    errorMessage = when (e) {
+                        is UnknownHostException -> "Sem conexão com a internet"
+                        else -> "Erro ao carregar recomendações: ${e.message}"
+                    },
+                    isLoading = false
+                )
+            }
+        }
+    }
+
+    // Função para atualizar recomendações quando as preferências mudarem
+    fun updateRecommendations() {
+        fetchRecommendedMovies()
+    }
+
     companion object {
         val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
@@ -176,12 +233,11 @@ class MovieListViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                val application = checkNotNull(extras[APPLICATION_KEY])
+                val application = checkNotNull(extras[APPLICATION_KEY]) as CineNowApplication
                 return MovieListViewModel(
-                    repository = (application as CineNowApplication).repository
+                    repository = application.repository
                 ) as T
             }
-
         }
     }
 }

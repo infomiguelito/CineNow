@@ -1,8 +1,10 @@
 package com.devspacecinenow.list.presentation.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,15 +16,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,65 +47,90 @@ fun MovieListScreen(
     val topRatedMovies by viewModel.uiTopRated.collectAsState()
     val upComingMovies by viewModel.uiUpComing.collectAsState()
     val popularMovies by viewModel.uiPopular.collectAsState()
+    val recommendedMovies by viewModel.uiRecommended.collectAsState()
 
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Cabeçalho com título e botão de preferências
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "CineNow",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            
+            IconButton(onClick = { navController.navigate("preferences") }) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Preferências",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        }
 
-
-    MovieListContent(
-        nowPlayingMovies = nowPlayingMovies,
-        topRatedMovies = topRatedMovies,
-        popularMovies = popularMovies,
-        upComingMovies = upComingMovies
-    ) { itemClicked ->
-        navController.navigate(route = "movieDetail/${itemClicked.id}")
+        // Conteúdo principal
+        MovieListContent(
+            nowPlayingMovies = nowPlayingMovies,
+            topRatedMovies = topRatedMovies,
+            popularMovies = popularMovies,
+            upComingMovies = upComingMovies,
+            recommendedMovies = recommendedMovies
+        ) { itemClicked ->
+            navController.navigate(route = "movieDetail/${itemClicked.id}")
+        }
     }
-
 }
 
 @Composable
 private fun MovieListContent(
     nowPlayingMovies: MovieListUiState,
     topRatedMovies: MovieListUiState,
-    popularMovies:MovieListUiState,
-    upComingMovies:MovieListUiState,
+    popularMovies: MovieListUiState,
+    upComingMovies: MovieListUiState,
+    recommendedMovies: MovieListUiState,
     onClick: (MovieUiData) -> Unit
-
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            modifier = Modifier.padding(8.dp),
-            fontSize = 40.sp,
-            fontWeight = FontWeight.SemiBold,
-            text = "CineNow",
+        MovieSession(
+            label = "Recomendados para Você",
+            movieListUiState = recommendedMovies,
+            onClick = onClick
         )
 
         MovieSession(
-             label = "Top Rated",
-             movieListUiState = topRatedMovies,
-             onClick = onClick
+            label = "Top Rated",
+            movieListUiState = topRatedMovies,
+            onClick = onClick
         )
 
         MovieSession(
-            label = " Now Playing",
+            label = "Now Playing",
             movieListUiState = nowPlayingMovies,
             onClick = onClick
         )
 
         MovieSession(
-             label = "Upcoming",
-             movieListUiState = upComingMovies,
-             onClick = onClick
-         )
-
-        MovieSession(
-            label = " Popular",
-            movieListUiState = popularMovies,
+            label = "Upcoming",
+            movieListUiState = upComingMovies,
             onClick = onClick
         )
 
+        MovieSession(
+            label = "Popular",
+            movieListUiState = popularMovies,
+            onClick = onClick
+        )
     }
 }
 
@@ -109,8 +140,6 @@ private fun MovieSession(
     movieListUiState: MovieListUiState,
     onClick: (MovieUiData) -> Unit
 ) {
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -123,22 +152,21 @@ private fun MovieSession(
         )
         Spacer(modifier = Modifier.size(8.dp))
         if (movieListUiState.isLoading) {
-
-        } else
-            if (movieListUiState.isError) {
-
-                Text(
-                    color = Color.Red,
-                    text = movieListUiState.errorMessage ?:"",
-                )
-
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(32.dp)
+            )
+        } else if (movieListUiState.isError) {
+            Text(
+                color = Color.Red,
+                text = movieListUiState.errorMessage ?:"",
+            )
         } else {
             MovieList(movieList = movieListUiState.list, onClick = onClick)
         }
     }
-
 }
-
 
 @Composable
 private fun MovieList(
@@ -183,6 +211,15 @@ private fun MovieItem(
             fontWeight = FontWeight.SemiBold,
             text = movieDto.title
         )
+        if (movieDto.genres.isNotEmpty()) {
+            Text(
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.primary,
+                text = movieDto.genres.joinToString(", ")
+            )
+        }
         Text(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

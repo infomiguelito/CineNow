@@ -14,4 +14,5 @@ data class MovieUiData(
     val title: String,
     val overview: String,
     val image: String,
+    val genres: List<String> = emptyList()
 )

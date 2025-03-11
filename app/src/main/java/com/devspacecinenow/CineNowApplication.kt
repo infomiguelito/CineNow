@@ -8,6 +8,7 @@ import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.data.local.MovieListLocalDataSource
 import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
+import com.devspacecinenow.preferences.data.UserPreferencesRepository
 
 class CineNowApplication: Application(){
 
@@ -30,10 +31,15 @@ class CineNowApplication: Application(){
         MovieListRemoteDataSource(listService)
     }
 
+    val userPreferencesRepository: UserPreferencesRepository by lazy {
+        UserPreferencesRepository(applicationContext)
+    }
+
     val repository: MovieListRepository by lazy {
         MovieListRepository(
             local = localDataSource,
-            remote = remoteDataSource
+            remote = remoteDataSource,
+            userPreferencesRepository = userPreferencesRepository
         )
     }
 }

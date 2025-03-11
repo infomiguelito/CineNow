@@ -65,7 +65,8 @@ class MovieListRemoteDataSource(
                         title = it.title,
                         overview = it.overview,
                         image = it.posterFullPath,
-                        category = MovieCategory.Popular.name
+                        category = MovieCategory.Popular.name,
+                        genres = it.genre_ids.map { genreId -> getGenreName(genreId) }
                     )
                 }
                 Result.success(movies)
@@ -75,6 +76,31 @@ class MovieListRemoteDataSource(
         } catch (ex: Exception) {
             ex.printStackTrace()
             Result.failure(ex)
+        }
+    }
+
+    private fun getGenreName(genreId: Int): String {
+        return when (genreId) {
+            28 -> "Ação"
+            12 -> "Aventura"
+            16 -> "Animação"
+            35 -> "Comédia"
+            80 -> "Crime"
+            99 -> "Documentário"
+            18 -> "Drama"
+            10751 -> "Família"
+            14 -> "Fantasia"
+            36 -> "História"
+            27 -> "Terror"
+            10402 -> "Música"
+            9648 -> "Mistério"
+            10749 -> "Romance"
+            878 -> "Ficção Científica"
+            10770 -> "Cinema TV"
+            53 -> "Thriller"
+            10752 -> "Guerra"
+            37 -> "Faroeste"
+            else -> "Outro"
         }
     }
 

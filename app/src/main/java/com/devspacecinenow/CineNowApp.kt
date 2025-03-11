@@ -10,25 +10,40 @@ import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.detail.presentation.ui.MovieDetailScreen
 import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.list.presentation.ui.MovieListScreen
+import com.devspacecinenow.preferences.presentation.UserPreferencesViewModel
+import com.devspacecinenow.preferences.presentation.ui.UserPreferencesScreen
 
 @Composable
 fun CineNowApp(
     listViewModel: MovieListViewModel,
-    detailViewModel: MovieDetailViewModel
+    detailViewModel: MovieDetailViewModel,
+    preferencesViewModel: UserPreferencesViewModel
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "movieList") {
         composable(route = "movieList") {
-            MovieListScreen(navController,listViewModel)
+            MovieListScreen(
+                navController = navController,
+                viewModel = listViewModel
+            )
         }
+        
         composable(
-            route = "movieDetail" + "/{itemId}",
+            route = "movieDetail/{itemId}",
             arguments = listOf(navArgument("itemId") {
                 type = NavType.StringType
             })
         ) { backStackEntry ->
             val movieId = requireNotNull(backStackEntry.arguments?.getString("itemId"))
             MovieDetailScreen(movieId, navController, detailViewModel)
+        }
+
+        composable(route = "preferences") {
+            UserPreferencesScreen(
+                navController = navController,
+                viewModel = preferencesViewModel,
+                movieListViewModel = listViewModel
+            )
         }
     }
 }
