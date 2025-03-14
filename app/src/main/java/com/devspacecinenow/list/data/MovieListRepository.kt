@@ -127,7 +127,7 @@ class MovieListRepository(
                 return Result.failure(Exception("Nenhum filme disponível"))
             }
 
-            val selectedGenres = userPreferencesRepository.getSelectedGenres().first()
+            val selectedGenres = userPreferencesRepository.getSelectedGenres()
             println("DEBUG: Gêneros selecionados: $selectedGenres")
             
             val watchedMovies = userPreferencesRepository.getWatchedMovies()
@@ -140,38 +140,71 @@ class MovieListRepository(
             // Se não há filmes não assistidos, retorna os filmes originais
             if (unwatchedMovies.isEmpty()) {
                 println("DEBUG: Retornando filmes originais (todos assistidos)")
-                return Result.success(movies.take(10))
+                return Result.success(movies.take(20))
             }
             
             val recommendedMovies = if (selectedGenres.isEmpty()) {
                 // Se não há gêneros selecionados, retorna os filmes não assistidos
                 println("DEBUG: Nenhum gênero selecionado, retornando filmes não assistidos")
-                unwatchedMovies.take(10)
+                unwatchedMovies.take(20)
             } else {
-                // Filtrar filmes que tenham pelo menos um dos gêneros selecionados
-                val matchingMovies = unwatchedMovies.filter { movie ->
-                    val hasMatchingGenre = movie.genres.any { it in selectedGenres }
-                    println("DEBUG: Filme ${movie.title} tem gêneros ${movie.genres}, match: $hasMatchingGenre")
-                    hasMatchingGenre
+                // Primeiro, vamos contar quantos filmes temos por gênero
+                val availableMoviesPerGenre = selectedGenres.associateWith { genre ->
+                    unwatchedMovies.count { movie -> movie.genres.contains(genre) }
                 }
-                
-                // Se não encontrar filmes com os gêneros selecionados, retorna filmes não assistidos
-                if (matchingMovies.isEmpty()) {
-                    println("DEBUG: Nenhum filme com gêneros selecionados, retornando filmes não assistidos")
-                    unwatchedMovies.take(10)
+                println("DEBUG: Filmes disponíveis por gênero: $availableMoviesPerGenre")
+
+                // Filtramos apenas os gêneros que têm filmes disponíveis
+                val genresWithMovies = availableMoviesPerGenre.filter { it.value > 0 }.keys.toList()
+                println("DEBUG: Gêneros com filmes disponíveis: $genresWithMovies")
+
+                if (genresWithMovies.isEmpty()) {
+                    // Se nenhum dos gêneros selecionados tem filmes, retorna filmes não assistidos
+                    println("DEBUG: Nenhum filme encontrado para os gêneros selecionados")
+                    unwatchedMovies.take(20)
                 } else {
-                    // Ordenar por quantidade de gêneros em comum
-                    println("DEBUG: Encontrados ${matchingMovies.size} filmes com gêneros selecionados")
-                    matchingMovies.sortedByDescending { movie ->
-                        movie.genres.count { it in selectedGenres }
-                    }.take(10)
+                    // Calculamos quantos filmes pegar de cada gênero
+                    val moviesPerGenre = (20 / genresWithMovies.size).coerceAtLeast(5)
+                    println("DEBUG: Pegando até $moviesPerGenre filmes de cada gênero")
+
+                    // Agrupar filmes por gênero
+                    val moviesByGenre = mutableListOf<Movie>()
+                    
+                    // Para cada gênero que tem filmes, pegamos a quantidade calculada
+                    genresWithMovies.forEach { genre ->
+                        val moviesForGenre = unwatchedMovies.filter { movie ->
+                            movie.genres.contains(genre)
+                        }.take(moviesPerGenre)
+                        moviesByGenre.addAll(moviesForGenre)
+                        println("DEBUG: Adicionados ${moviesForGenre.size} filmes do gênero $genre")
+                    }
+                    
+                    // Remove duplicatas
+                    val uniqueMovies = moviesByGenre.distinct()
+                    println("DEBUG: Total de filmes únicos: ${uniqueMovies.size}")
+                    
+                    // Se não tivermos filmes suficientes, adiciona mais dos filmes não assistidos
+                    if (uniqueMovies.size < 20) {
+                        val remainingCount = 20 - uniqueMovies.size
+                        val additionalMovies = unwatchedMovies
+                            .filterNot { it in uniqueMovies }
+                            .filter { movie ->
+                                movie.genres.any { it in genresWithMovies }
+                            }
+                            .take(remainingCount)
+                        
+                        println("DEBUG: Adicionando mais ${additionalMovies.size} filmes para completar")
+                        (uniqueMovies + additionalMovies).distinct()
+                    } else {
+                        uniqueMovies.take(20)
+                    }
                 }
             }
             
             // Garantir que sempre retornamos uma lista não vazia
             if (recommendedMovies.isEmpty()) {
                 println("DEBUG: Lista de recomendações vazia, retornando filmes originais")
-                Result.success(movies.take(10))
+                Result.success(movies.take(20))
             } else {
                 println("DEBUG: Retornando ${recommendedMovies.size} filmes recomendados")
                 Result.success(recommendedMovies)
@@ -183,7 +216,7 @@ class MovieListRepository(
             val localMovies = local.getPopularMovies()
             return if (localMovies.isNotEmpty()) {
                 println("DEBUG: Retornando ${localMovies.size} filmes do cache local")
-                Result.success(localMovies.take(10))
+                Result.success(localMovies.take(20))
             } else {
                 Result.failure(ex)
             }
