@@ -105,10 +105,8 @@ class MovieListRepository(
 
     suspend fun getRecommended(): Result<List<Movie>?> {
         return try {
-            // Primeiro tenta buscar do remoto
             val result = remote.getPopular()
             
-            // Lista de filmes que vamos usar (remoto ou local)
             val movies = if (result.isSuccess) {
                 val moviesRemote = result.getOrNull() ?: emptyList()
                 if (moviesRemote.isNotEmpty()) {
@@ -116,7 +114,6 @@ class MovieListRepository(
                 }
                 moviesRemote
             } else {
-                // Se falhar o remoto, usa o local
                 local.getPopularMovies()
             }
 
@@ -133,44 +130,35 @@ class MovieListRepository(
             val watchedMovies = userPreferencesRepository.getWatchedMovies()
             println("DEBUG: Filmes assistidos: $watchedMovies")
             
-            // Filmes que não foram assistidos
             val unwatchedMovies = movies.filterNot { movie -> movie.id in watchedMovies }
             println("DEBUG: Filmes não assistidos: ${unwatchedMovies.size}")
             
-            // Se não há filmes não assistidos, retorna os filmes originais
             if (unwatchedMovies.isEmpty()) {
                 println("DEBUG: Retornando filmes originais (todos assistidos)")
                 return Result.success(movies.take(20))
             }
             
             val recommendedMovies = if (selectedGenres.isEmpty()) {
-                // Se não há gêneros selecionados, retorna os filmes não assistidos
                 println("DEBUG: Nenhum gênero selecionado, retornando filmes não assistidos")
                 unwatchedMovies.take(20)
             } else {
-                // Primeiro, vamos contar quantos filmes temos por gênero
                 val availableMoviesPerGenre = selectedGenres.associateWith { genre ->
                     unwatchedMovies.count { movie -> movie.genres.contains(genre) }
                 }
                 println("DEBUG: Filmes disponíveis por gênero: $availableMoviesPerGenre")
 
-                // Filtramos apenas os gêneros que têm filmes disponíveis
                 val genresWithMovies = availableMoviesPerGenre.filter { it.value > 0 }.keys.toList()
                 println("DEBUG: Gêneros com filmes disponíveis: $genresWithMovies")
 
                 if (genresWithMovies.isEmpty()) {
-                    // Se nenhum dos gêneros selecionados tem filmes, retorna filmes não assistidos
                     println("DEBUG: Nenhum filme encontrado para os gêneros selecionados")
                     unwatchedMovies.take(20)
                 } else {
-                    // Calculamos quantos filmes pegar de cada gênero
                     val moviesPerGenre = (20 / genresWithMovies.size).coerceAtLeast(5)
                     println("DEBUG: Pegando até $moviesPerGenre filmes de cada gênero")
 
-                    // Agrupar filmes por gênero
                     val moviesByGenre = mutableListOf<Movie>()
                     
-                    // Para cada gênero que tem filmes, pegamos a quantidade calculada
                     genresWithMovies.forEach { genre ->
                         val moviesForGenre = unwatchedMovies.filter { movie ->
                             movie.genres.contains(genre)
@@ -179,11 +167,9 @@ class MovieListRepository(
                         println("DEBUG: Adicionados ${moviesForGenre.size} filmes do gênero $genre")
                     }
                     
-                    // Remove duplicatas
                     val uniqueMovies = moviesByGenre.distinct()
                     println("DEBUG: Total de filmes únicos: ${uniqueMovies.size}")
                     
-                    // Se não tivermos filmes suficientes, adiciona mais dos filmes não assistidos
                     if (uniqueMovies.size < 20) {
                         val remainingCount = 20 - uniqueMovies.size
                         val additionalMovies = unwatchedMovies
@@ -201,7 +187,6 @@ class MovieListRepository(
                 }
             }
             
-            // Garantir que sempre retornamos uma lista não vazia
             if (recommendedMovies.isEmpty()) {
                 println("DEBUG: Lista de recomendações vazia, retornando filmes originais")
                 Result.success(movies.take(20))
@@ -212,7 +197,6 @@ class MovieListRepository(
         } catch (ex: Exception) {
             println("DEBUG: Exceção: ${ex.message}")
             ex.printStackTrace()
-            // Tenta retornar filmes do cache local em caso de erro
             val localMovies = local.getPopularMovies()
             return if (localMovies.isNotEmpty()) {
                 println("DEBUG: Retornando ${localMovies.size} filmes do cache local")

@@ -61,10 +61,11 @@ class UserPreferencesViewModel(
         )
     }
 
-    fun savePreferences() {
+    fun savePreferences(onSaved: () -> Unit = {}) {
         viewModelScope.launch {
             try {
                 repository.saveSelectedGenres(_uiState.value.selectedGenres.toList())
+                onSaved()
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = "Erro ao salvar preferências: ${e.message}"

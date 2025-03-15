@@ -225,7 +225,7 @@ class MovieListViewModel(
     // Função para atualizar recomendações quando as preferências mudarem
     fun updateRecommendations() {
         _uiRecommended.value = MovieListUiState(isLoading = true)
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = repository.getRecommended()
                 if (response.isSuccess) {

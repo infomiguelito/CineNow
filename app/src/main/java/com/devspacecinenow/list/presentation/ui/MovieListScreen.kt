@@ -52,7 +52,6 @@ fun MovieListScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Cabeçalho com título e botão de preferências
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,7 +74,6 @@ fun MovieListScreen(
             }
         }
 
-        // Conteúdo principal
         MovieListContent(
             nowPlayingMovies = nowPlayingMovies,
             topRatedMovies = topRatedMovies,
@@ -103,7 +101,7 @@ private fun MovieListContent(
             .verticalScroll(rememberScrollState())
     ) {
         MovieSession(
-            label = "Recomendados para Você",
+            label = "Recommended for You",
             movieListUiState = recommendedMovies,
             onClick = onClick
         )

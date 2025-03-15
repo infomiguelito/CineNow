@@ -25,14 +25,12 @@ fun UserPreferencesScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Título
         Text(
             text = "Suas Preferências",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // Gêneros favoritos
         Text(
             text = "Gêneros Favoritos",
             style = MaterialTheme.typography.titleLarge,
@@ -75,9 +73,10 @@ fun UserPreferencesScreen(
             }
             Button(
                 onClick = {
-                    viewModel.savePreferences()
-                    movieListViewModel.updateRecommendations()
-                    navController.navigateUp()
+                    viewModel.savePreferences {
+                        movieListViewModel.updateRecommendations()
+                        navController.navigateUp()
+                    }
                 },
                 modifier = Modifier.weight(1f)
             ) {
