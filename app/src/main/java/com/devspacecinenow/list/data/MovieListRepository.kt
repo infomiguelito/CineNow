@@ -2,12 +2,12 @@ package com.devspacecinenow.list.data
 
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.local.LocalDataSource
-import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
+import com.devspacecinenow.list.data.remote.RemoteDataSource
 import com.devspacecinenow.preferences.data.UserPreferencesRepository
 
 class MovieListRepository(
     private val local: LocalDataSource,
-    private val remote: MovieListRemoteDataSource,
+    private val remote: RemoteDataSource,
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
     suspend fun getNowPlaying(): Result<List<Movie>?> {

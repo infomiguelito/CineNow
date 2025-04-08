@@ -12,34 +12,7 @@ import com.devspacecinenow.preferences.data.UserPreferencesRepository
 
 class CineNowApplication: Application(){
 
-    private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            CineNowDataBase::class.java,"database-cine-now"
-        ).build()
-    }
-
-    private val listService by lazy {
-        RetrofitClient.retrofitInstance.create(ListService::class.java)
-    }
-
-    private val localDataSource: MovieListLocalDataSource by lazy {
-        MovieListLocalDataSource(db.getMovieDao())
-    }
-
-    private val remoteDataSource: MovieListRemoteDataSource by lazy {
-        MovieListRemoteDataSource(listService)
-    }
-
-    val userPreferencesRepository: UserPreferencesRepository by lazy {
-        UserPreferencesRepository(applicationContext)
-    }
-
-    val repository: MovieListRepository by lazy {
-        MovieListRepository(
-            local = localDataSource,
-            remote = remoteDataSource,
-            userPreferencesRepository = userPreferencesRepository
-        )
+    val repository by lazy {
+        CineNowServiceLocator.getRepository(this)
     }
 }
