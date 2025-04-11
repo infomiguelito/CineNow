@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.devspacecinenow.preferences.presentation.UserPreferencesViewModel
 import androidx.navigation.NavHostController
 import com.devspacecinenow.list.presentation.MovieListViewModel
@@ -15,8 +16,8 @@ import com.devspacecinenow.list.presentation.MovieListViewModel
 @Composable
 fun UserPreferencesScreen(
     navController: NavHostController,
-    viewModel: UserPreferencesViewModel,
-    movieListViewModel: MovieListViewModel
+    viewModel: UserPreferencesViewModel = hiltViewModel(),
+    movieListViewModel: MovieListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

@@ -8,13 +8,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.devspacecinenow.common.data.remote.RetrofitClient
 import com.devspacecinenow.common.data.remote.model.MovieDto
 import com.devspacecinenow.detail.data.MovieDetail
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieDetailViewModel(
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(
     private val detailService: MovieDetail
 ) : ViewModel() {
 
@@ -34,26 +37,6 @@ class MovieDetailViewModel(
                     )
                 }
             }
-        }
-    }
-
-    fun cleanMovieId(){
-        viewModelScope.launch {
-            delay(1000)
-            _uiDetailMovies.value = null
-        }
-    }
-
-    companion object {
-        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                val detailService = RetrofitClient.retrofitInstance.create(MovieDetail::class.java)
-                return MovieDetailViewModel(
-                    detailService
-                ) as T
-            }
-
         }
     }
 }

@@ -4,8 +4,9 @@ import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.local.LocalDataSource
 import com.devspacecinenow.list.data.remote.RemoteDataSource
 import com.devspacecinenow.preferences.data.UserPreferencesRepository
+import javax.inject.Inject
 
-class MovieListRepository(
+class MovieListRepository @Inject constructor(
     private val local: LocalDataSource,
     private val remote: RemoteDataSource,
     private val userPreferencesRepository: UserPreferencesRepository

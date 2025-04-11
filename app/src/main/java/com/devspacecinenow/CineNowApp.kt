@@ -14,17 +14,12 @@ import com.devspacecinenow.preferences.presentation.UserPreferencesViewModel
 import com.devspacecinenow.preferences.presentation.ui.UserPreferencesScreen
 
 @Composable
-fun CineNowApp(
-    listViewModel: MovieListViewModel,
-    detailViewModel: MovieDetailViewModel,
-    preferencesViewModel: UserPreferencesViewModel
-) {
+fun CineNowApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "movieList") {
         composable(route = "movieList") {
             MovieListScreen(
-                navController = navController,
-                viewModel = listViewModel
+                navController = navController
             )
         }
         
@@ -35,14 +30,12 @@ fun CineNowApp(
             })
         ) { backStackEntry ->
             val movieId = requireNotNull(backStackEntry.arguments?.getString("itemId"))
-            MovieDetailScreen(movieId, navController, detailViewModel)
+            MovieDetailScreen(movieId, navController)
         }
 
         composable(route = "preferences") {
             UserPreferencesScreen(
-                navController = navController,
-                viewModel = preferencesViewModel,
-                movieListViewModel = listViewModel
+                navController = navController
             )
         }
     }

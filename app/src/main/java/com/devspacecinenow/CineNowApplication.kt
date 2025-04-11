@@ -9,10 +9,7 @@ import com.devspacecinenow.list.data.local.MovieListLocalDataSource
 import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 import com.devspacecinenow.preferences.data.UserPreferencesRepository
+import dagger.hilt.android.HiltAndroidApp
 
-class CineNowApplication: Application(){
-
-    val repository by lazy {
-        CineNowServiceLocator.getRepository(this)
-    }
-}
+@HiltAndroidApp
+class CineNowApplication: Application()

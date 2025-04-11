@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.devspacecinenow.preferences.data.UserPreferencesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class UserPreferencesUiState(
     val availableGenres: List<String> = listOf(
@@ -20,7 +22,8 @@ data class UserPreferencesUiState(
     val error: String? = null
 )
 
-class UserPreferencesViewModel(
+@HiltViewModel
+class UserPreferencesViewModel @Inject constructor(
     private val repository: UserPreferencesRepository
 ) : ViewModel() {
 

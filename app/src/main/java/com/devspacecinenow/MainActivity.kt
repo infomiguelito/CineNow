@@ -13,14 +13,12 @@ import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.preferences.data.UserPreferencesRepository
 import com.devspacecinenow.preferences.presentation.UserPreferencesViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val listViewModel by viewModels<MovieListViewModel> {MovieListViewModel.factory}
-    private val detailViewModel by viewModels<MovieDetailViewModel> {MovieDetailViewModel.factory}
-    private val preferencesViewModel by viewModels<UserPreferencesViewModel> {
-        UserPreferencesViewModel.factory(UserPreferencesRepository(this))
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +29,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CineNowApp(
-                        listViewModel = listViewModel,
-                        detailViewModel = detailViewModel,
-                        preferencesViewModel = preferencesViewModel
+
                     )
                 }
             }
